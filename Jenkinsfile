@@ -7,6 +7,11 @@ pipeline {
                 powershell 'if (-not (Test-Path index.html)) { throw "index.html is missing" }; Select-String -Path index.html -Pattern "Build Bloom" -Quiet'
             }
         }
+        stage('Build Docker image') {
+            steps {
+                powershell 'docker build --tag sample-jenkins:$env:BUILD_NUMBER .'
+            }
+        }
         stage('Deploy to Nginx') {
             steps {
                 powershell '''
